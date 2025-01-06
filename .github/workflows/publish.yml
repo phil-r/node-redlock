@@ -1,0 +1,35 @@
+name: Publish Package to npm
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Package tag"
+        required: false
+        type: string
+  push:
+    branches:
+      - master
+      - "CU-86c1h04qk-npm-auth"
+jobs:
+  publish:
+    permissions:
+      packages: write
+      pull-requests: write
+      contents: read
+      id-token: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@kittl"
+      - name: Install package dependencies
+        run: npm install --frozen-lockfile
+
+      - name: Build package
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
