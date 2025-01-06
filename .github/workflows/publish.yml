@@ -1,0 +1,34 @@
+name: Publish Package to npm
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Package tag"
+        required: false
+        type: string
+  push:
+    branches:
+      - master
+jobs:
+  publish:
+    permissions:
+      packages: write
+      pull-requests: write
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@kittl"
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Install package dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build package
+        run: npm publish

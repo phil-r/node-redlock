@@ -74,5 +74,8 @@
   "dependencies": {
     "node-abort-controller": "^3.0.1"
   },
-  "type": "module"
+  "type": "module",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
 }
