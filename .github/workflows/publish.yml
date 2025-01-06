@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - master
+      - "CU-86c1h04qk-npm-auth"
 jobs:
   publish:
     permissions:
